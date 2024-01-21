@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(7, 80px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #000;
+            cursor: pointer;
+        }
+
+        .empty {
+            background-color: #eee;
+        }
+
+        .player1 {
+            background-color: #ff6666;
+        }
+
+        .player2 {
+            background-color: #6666ff;
+        }
+    </style>
+</head>
+<body>
+
+<div id="board"></div>
+
+<script>
+    const ROWS = 6;
+    const COLS = 7;
+    let currentPlayer = 1; // Player 1 starts
+    let board = createBoard();
+
+    function createBoard() {
+        return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+    }
+
+    function drawBoard() {
+        const boardContainer = document.getElementById('board');
+        boardContainer.innerHTML = '';
+
+        for (let row = 0; row < ROWS; row++) {
+            for (let col = 0; col < COLS; col++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell', 'empty');
+                cell.setAttribute('data-row', row);
+                cell.setAttribute('data-col', col);
+                cell.addEventListener('click', handleMove);
+                boardContainer.appendChild(cell);
+            }
+        }
+    }
+
+    function handleMove(event) {
+        const col = parseInt(event.target.dataset.col);
+        const row = dropPiece(col);
+
+        if (row !== -1) {
+            updateBoard(row, col);
+            if (checkWinner(row, col)) {
+                alert(`Player ${currentPlayer} wins!`);
+                resetGame();
+            } else if (isBoardFull()) {
+                alert('It\'s a draw!');
+                resetGame();
+            } else {
+                currentPlayer = 3 - currentPlayer; // Switch player
+            }
+        }
+    }
+
+    function dropPiece(col) {
+        for (let row = ROWS - 1; row >= 0; row--) {
+            if (board[row][col] === 0) {
+                return row;
+            }
+        }
+        return -1; // Column is full
+    }
+
+    function updateBoard(row, col) {
+        const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
+        cell.classList.remove('empty');
+        cell.classList.add(`player${currentPlayer}`);
+        board[row][col] = currentPlayer;
+    }
+
+    function checkWinner(row, col) {
+        return (
+            checkDirection(row, col, 0, 1) ||  // Horizontal
+            checkDirection(row, col, 1, 0) ||  // Vertical
+            checkDirection(row, col, 1, 1) ||  // Diagonal /
+            checkDirection(row, col, 1, -1)    // Diagonal \
+        );
+    }
+
+    function checkDirection(row, col, rowDir, colDir) {
+        const player = currentPlayer;
+        let count = 0;
+
+        for (let i = -3; i <= 3; i++) {
+            const r = row + i * rowDir;
+            const c = col + i * colDir;
+
+            if (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] === player) {
+                count++;
+                if (count === 4) {
+                    return true;
+                }
+            } else {
+                count = 0;
+            }
+        }
+
+        return false;
+    }
+
+    function isBoardFull() {
+        return board.every(row => row.every(cell => cell !== 0));
+    }
+
+    function resetGame() {
+        currentPlayer = 1;
+        board = createBoard();
+        drawBoard();
+    }
+
+    drawBoard();
+</script>
+
+</body>
+</html>

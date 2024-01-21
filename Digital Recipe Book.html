@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Recipe Book</title>
+    <style>
+	body {
+    font-family: 'Times new roman', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e8bcb9;
+}
+h1 {
+    text-align: center;
+    padding: 30px 0;
+    font-size: 32px;
+    color: #007bff; /* Change the color to a vibrant blue */
+}
+#search-bar {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+	font-family: 'Times new roman'
+}
+#search-bar input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+	font-family: 'Times new roman'
+}
+#filter-options {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+	font-family: 'Times new roman';
+}
+#filter-options select {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+	font-family: 'Times new roman';
+}
+#recipe-cards {
+    width: 80%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+    padding: 20px 0;
+	text-align: center;
+}
+.recipe-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+.recipe-card:hover {
+    transform: scale(1.10);
+    background-color: #b51a2b; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+}
+.recipe-card h3 {
+    margin-bottom: 12px;
+    font-size: 24px;
+    color: #333;
+}
+.recipe-card p {
+    margin: 0;
+    font-size: 16px;
+    color: white;
+}
+#ai-recommendations {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+.recommended-recipes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+}
+</style>
+</head>
+<body>
+    <h1>Digital Recipe Book</h1>
+    <div id="search-bar">
+        <input type="text" placeholder="Search recipes...">
+    </div>
+    <div id="filter-options">
+        <select>
+            <option value="all">All</option>
+			<option value="karnataka">Karnataka Famous</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="non-vegetarian">Non-vegetarian</option>
+			<option value="northIndian">North Indian</option>
+			<option value="southIndian">South Indian</option>
+            <option value="chats">Chats</option>
+			<option value="juice">Juice</option>
+			<option value="desserts">Desserts</option>
+        </select>
+    </div>
+    <div id="recipe-cards">
+        <!-- Recipe cards will be generated here -->
+    </div>
+    <div id="ai-recommendations">
+        <h2>AI Recommendations</h2>
+        <div class="recommended-recipes">
+            <!-- Recommended recipes will be generated here -->
+        </div>
+    </div>
+    <script>
+        // Simulated recipe data
+        const recipes = [
+			{ id: 46, title: 'Bisi Bele Bath', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 47, title: 'Mysore Pak', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 48, title: 'Neer Dosa', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 49, title: 'Jolada rotti', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 50, title: 'Udupi sambar', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 51, title: 'Maddur Vada', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 52, title: 'Mangalore Buns', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+			{ id: 53, title: 'Ennegayi', vegetarian: true, 'non-vegetarian': false, chats: false, karnataka: true },
+            { id: 1, title: 'Pizza', vegetarian: false, 'non-vegetarian': false},
+            { id: 2, title: 'Sandwiches', vegetarian: true, 'non-vegetarian': false},
+            { id: 3, title: 'Pitas', vegetarian: true, 'non-vegetarian': false},
+            { id: 4, title: 'French fries', vegetarian: true, 'non-vegetarian': false},
+            { id: 5, title: 'Vegetable Soup', vegetarian: true, 'non-vegetarian': false},
+            { id: 6, title: 'Coriander Chicken', vegetarian: false, 'non-vegetarian': false},
+            { id: 7, title: 'Tandoori Chicken', vegetarian: false, 'non-vegetarian': true},
+            { id: 8, title: 'Burger', vegetarian: true, 'non-vegetarian': false},
+            { id: 9, title: 'Vegetable Noodles', vegetarian: true, 'non-vegetarian': true},
+            { id: 10, title: 'Stuffed Peppers', vegetarian: true, 'non-vegetarian': false},
+            { id: 11, title: 'Cake', vegetarian: false, 'non-vegetarian': false},
+            { id: 12, title: 'Chicken Briyani', vegetarian: false, 'non-vegetarian': true},
+            { id: 13, title: 'Chicken nuggets', vegetarian: false, 'non-vegetarian': true},
+			{ id: 14, title: 'Chaat Masala', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 15, title: 'Bhel Puri', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 16, title: 'Sukha Bhel', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 17, title: 'Dahi Vadas', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 18, title: 'pani puri', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 19, title: 'Gol gappe', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 20, title: 'Sweet corn', vegetarian: true, 'non-vegetarian': false, chats: true },
+			{ id: 21, title: 'Orange Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+            { id: 22, title: 'Apple Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+            { id: 23, title: 'Carrot Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 24, title: 'Blueberry Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 25, title: 'Cranberry Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 26, title: 'Grape Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 27, title: 'Pomegranate Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 28, title: 'Pineapple Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 29, title: 'Watermelon Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 30, title: 'Muskmelon Juice', vegetarian: true, 'non-vegetarian': false, chats: false, juice: true },
+			{ id: 31, title: 'Chocolate Cake', vegetarian: true, 'non-vegetarian': false, chats: false, desserts: true },
+            { id: 32, title: 'Cheesecake', vegetarian: true, 'non-vegetarian': false, chats: false, desserts: true },
+            { id: 33, title: 'Apple Pie', vegetarian: true, 'non-vegetarian': false, chats: false, desserts: true },
+            { id: 34, title: 'Tiramisu', vegetarian: true, 'non-vegetarian': false, chats: false, desserts: true },
+            { id: 35, title: 'Ice Cream Sundae', vegetarian: true, 'non-vegetarian': false, chats: false, desserts: true },
+			{ id: 36, title: 'Butter Chicken', vegetarian: false, 'non-vegetarian': true, chats: false, northIndian: true },
+			{ id: 37, title: 'Paneer Tikka', vegetarian: true, 'non-vegetarian': false, chats: false, northIndian: true },
+			{ id: 38, title: 'Aloo Gobi', vegetarian: true, 'non-vegetarian': false, chats: false, northIndian: true },
+			{ id: 39, title: 'Dal Makhani', vegetarian: true, 'non-vegetarian': false, chats: false, northIndian: true },
+			{ id: 40, title: 'Rogan Josh', vegetarian: true, 'non-vegetarian': false, chats: false, northIndian: true },			
+			{ id: 41, title: 'Dosa', vegetarian: true, 'non-vegetarian': false, chats: false, southIndian: true },
+			{ id: 42, title: 'Idli-Sambhar', vegetarian: true, 'non-vegetarian': false, chats: false, southIndian: true },
+			{ id: 43, title: 'Uttapam', vegetarian: true, 'non-vegetarian': false, chats: false, southIndian: true },
+			{ id: 44, title: 'Chicken Chettinad', vegetarian: true, 'non-vegetarian': false, chats: false, southIndian: true },
+			{ id: 45, title: 'Pongal', vegetarian: true, 'non-vegetarian': false, chats: false, southIndian: true },
+						
+        ];
+        // Function to generate recipe cards
+        function generateRecipeCards(recipes) {
+            const recipeCards = document.getElementById('recipe-cards');
+            recipeCards.innerHTML = '';
+
+            recipes.forEach(recipe => {
+                const card = document.createElement('div');
+                card.classList.add('recipe-card');
+                card.innerHTML = `
+                    <h3>${recipe.title}</h3>
+                    <p>Vegetarian: ${recipe.vegetarian ? 'Yes' : 'No'}</p>
+                    <p>Non-vegetarian: ${recipe['non-vegetarian'] ? 'Yes' : 'No'}</p>
+                    <p>Chats: ${recipe.chats ? 'Yes' : 'No'}</p>
+                `;
+                recipeCards.appendChild(card);
+            });
+        }
+        // Generate recipe cards on initial load
+        generateRecipeCards(recipes);
+        // Add search functionality
+        const searchBar = document.getElementById('search-bar').children[0];
+        searchBar.addEventListener('input', e => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredRecipes = recipes.filter(recipe => recipe.title.toLowerCase().includes(searchTerm));
+            generateRecipeCards(filteredRecipes);
+        });
+        // Add filter functionality
+        const filterOptions = document.getElementById('filter-options').children[0];
+        filterOptions.addEventListener('change', e => {
+            let filteredRecipes = [...recipes];
+
+            if (e.target.value !== 'all') {
+                filteredRecipes = filteredRecipes.filter(recipe => recipe[e.target.value]);
+            }
+            generateRecipeCards(filteredRecipes);
+        });
+    </script>
+</body>
+</html>

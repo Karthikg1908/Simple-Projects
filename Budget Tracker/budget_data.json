@@ -1,0 +1,27 @@
+[
+  {
+    "category": "Salary",
+    "amount": 65000.0,
+    "type": "income"
+  },
+  {
+    "category": "Food",
+    "amount": 2000.0,
+    "type": "expense"
+  },
+  {
+    "category": "Rent",
+    "amount": 8000.0,
+    "type": "expense"
+  },
+  {
+    "category": "Shopping",
+    "amount": 2000.0,
+    "type": "expense"
+  },
+  {
+    "category": "Bills",
+    "amount": 2000.0,
+    "type": "expense"
+  }
+]

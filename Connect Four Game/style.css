@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(7, 80px);
+    gap: 5px;
+}
+
+.cell {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.player1 {
+    background-color: #f00;
+}
+
+.player2 {
+    background-color: #00f;
+}
+
+.winner {
+    background-color: yellow;
+}
